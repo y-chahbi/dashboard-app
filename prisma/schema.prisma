@@ -32,6 +32,7 @@ model Contact {
   email       String    @unique
   phone       String?
   position    String?
+  notes       String?
   agencyId    String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
