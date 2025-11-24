@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { hasReachedDailyLimit, incrementViewCount } from '@/lib/contact-view-limit';
+import { hasReachedDailyLimit, incrementViewCount, getViewStats } from '@/lib/contact-view-limit';
 
 /**
  * GET /api/contacts/[id]
@@ -9,7 +9,7 @@ import { hasReachedDailyLimit, incrementViewCount } from '@/lib/contact-view-lim
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Check authentication
@@ -18,7 +18,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Check if user has reached daily limit
     const limitReached = await hasReachedDailyLimit(userId);
@@ -44,7 +44,10 @@ export async function GET(
     // Increment view count
     await incrementViewCount(userId);
 
-    return NextResponse.json({ contact });
+    // Get updated view stats
+    const viewStats = await getViewStats(userId);
+
+    return NextResponse.json({ contact, viewStats });
   } catch (error) {
     console.error('Error fetching contact:', error);
     return NextResponse.json(

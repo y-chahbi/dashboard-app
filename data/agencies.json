@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Acme Digital Agency",
+    "email": "info@acmedigital.com",
+    "phone": "+1 (555) 123-4567",
+    "address": "123 Tech Boulevard, San Francisco, CA 94105",
+    "website": "https://www.acmedigital.com"
+  },
+  {
+    "name": "Global Marketing Solutions",
+    "email": "contact@globalmarketing.com",
+    "phone": "+1 (555) 234-5678",
+    "address": "456 Madison Avenue, New York, NY 10022",
+    "website": "https://www.globalmarketing.com"
+  },
+  {
+    "name": "Creative Studios Inc.",
+    "email": "hello@creativestudios.com",
+    "phone": "+1 (555) 345-6789",
+    "address": "789 Design Street, Los Angeles, CA 90028",
+    "website": "https://www.creativestudios.com"
+  },
+  {
+    "name": "Tech Innovators LLC",
+    "email": "support@techinnovators.com",
+    "phone": "+1 (555) 456-7890",
+    "address": "321 Innovation Way, Austin, TX 78701",
+    "website": "https://www.techinnovators.com"
+  }
+]

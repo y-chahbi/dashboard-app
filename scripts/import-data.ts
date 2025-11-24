@@ -1,11 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
-import { parse } from 'csv-parse/sync';
 
 const prisma = new PrismaClient();
 
-interface AgencyCSV {
+interface AgencyData {
   name: string;
   email?: string;
   phone?: string;
@@ -13,7 +12,7 @@ interface AgencyCSV {
   website?: string;
 }
 
-interface ContactCSV {
+interface ContactData {
   firstName: string;
   lastName: string;
   email: string;
@@ -32,58 +31,62 @@ function normalizeAgencyName(name: string): string {
   return name
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9\\s]/gi, '')
-    .replace(/\\s+/g, ' ');
+    .replace(/[^a-z0-9\s]/gi, '')
+    .replace(/\s+/g, ' ');
 }
 
 /**
- * Import agencies from CSV file
+ * Import agencies from JSON file
  */
 async function importAgencies(filePath: string): Promise<Map<string, string>> {
   console.log('📥 Importing agencies...');
 
   const fileContent = fs.readFileSync(filePath, 'utf-8');
-  const records: AgencyCSV[] = parse(fileContent, {
-    columns: true,
-    skip_empty_lines: true,
-    trim: true,
-  });
+  const records: AgencyData[] = JSON.parse(fileContent);
 
   const agencyMap = new Map<string, string>(); // normalized name -> id
+  let successCount = 0;
+  let failCount = 0;
 
   for (const record of records) {
     try {
       const agency = await prisma.agency.upsert({
         where: { name: record.name },
         update: {
-          email: record.email,
-          phone: record.phone,
-          address: record.address,
-          website: record.website,
+          email: record.email || null,
+          phone: record.phone || null,
+          address: record.address || null,
+          website: record.website || null,
         },
         create: {
           name: record.name,
-          email: record.email,
-          phone: record.phone,
-          address: record.address,
-          website: record.website,
+          email: record.email || null,
+          phone: record.phone || null,
+          address: record.address || null,
+          website: record.website || null,
         },
       });
 
       const normalizedName = normalizeAgencyName(record.name);
       agencyMap.set(normalizedName, agency.id);
+      successCount++;
       console.log(`✅ Agency: ${record.name}`);
     } catch (error) {
       console.error(`❌ Failed to import agency: ${record.name}`, error);
+      failCount++;
     }
   }
 
-  console.log(`✨ Imported ${agencyMap.size} agencies\n`);
+  console.log(`\n✨ Imported ${successCount} agencies`);
+  if (failCount > 0) {
+    console.log(`⚠️  Failed to import ${failCount} agencies`);
+  }
+  console.log('');
   return agencyMap;
 }
 
 /**
- * Import contacts from CSV file
+ * Import contacts from JSON file
  */
 async function importContacts(
   filePath: string,
@@ -92,11 +95,7 @@ async function importContacts(
   console.log('📥 Importing contacts...');
 
   const fileContent = fs.readFileSync(filePath, 'utf-8');
-  const records: ContactCSV[] = parse(fileContent, {
-    columns: true,
-    skip_empty_lines: true,
-    trim: true,
-  });
+  const records: ContactData[] = JSON.parse(fileContent);
 
   let successCount = 0;
   let failCount = 0;
@@ -117,16 +116,16 @@ async function importContacts(
         update: {
           firstName: record.firstName,
           lastName: record.lastName,
-          phone: record.phone,
-          position: record.position,
+          phone: record.phone || null,
+          position: record.position || null,
           agencyId,
         },
         create: {
           firstName: record.firstName,
           lastName: record.lastName,
           email: record.email,
-          phone: record.phone,
-          position: record.position,
+          phone: record.phone || null,
+          position: record.position || null,
           agencyId,
         },
       });
@@ -150,8 +149,8 @@ async function importContacts(
  */
 async function main() {
   try {
-    const agenciesPath = path.join(process.cwd(), 'data', 'agencies.csv');
-    const contactsPath = path.join(process.cwd(), 'data', 'contacts.csv');
+    const agenciesPath = path.join(process.cwd(), 'data', 'agencies.json');
+    const contactsPath = path.join(process.cwd(), 'data', 'contacts.json');
 
     // Check if files exist
     if (!fs.existsSync(agenciesPath)) {

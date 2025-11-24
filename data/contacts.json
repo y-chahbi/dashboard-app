@@ -1,0 +1,50 @@
+[
+  {
+    "firstName": "John",
+    "lastName": "Smith",
+    "email": "john.smith@acmedigital.com",
+    "phone": "+1 (555) 111-2222",
+    "position": "Senior Developer",
+    "agencyName": "Acme Digital Agency"
+  },
+  {
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "email": "sarah.j@acmedigital.com",
+    "phone": "+1 (555) 111-3333",
+    "position": "Project Manager",
+    "agencyName": "acme digital agency"
+  },
+  {
+    "firstName": "Michael",
+    "lastName": "Brown",
+    "email": "m.brown@globalmarketing.com",
+    "phone": "+1 (555) 222-4444",
+    "position": "Marketing Director",
+    "agencyName": "Global Marketing Solutions"
+  },
+  {
+    "firstName": "Emily",
+    "lastName": "Davis",
+    "email": "emily.davis@creativestudios.com",
+    "phone": "+1 (555) 333-5555",
+    "position": "Art Director",
+    "agencyName": "Creative Studios Inc."
+  },
+  {
+    "firstName": "David",
+    "lastName": "Wilson",
+    "email": "d.wilson@techinnovators.com",
+    "phone": "+1 (555) 444-6666",
+    "position": "CTO",
+    "agencyName": "TECH INNOVATORS LLC"
+  },
+  {
+    "firstName": "Jennifer",
+    "lastName": "Martinez",
+    "email": "jennifer.m@globalmarketing.com",
+    "phone": "+1 (555) 222-7777",
+    "position": "Account Executive",
+    "agencyName": "Global Marketing Solutions"
+  }
+]
