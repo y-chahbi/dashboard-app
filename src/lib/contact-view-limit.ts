@@ -16,30 +16,27 @@ function getStartOfToday(): Date {
 
 /**
  * Get or create the view limit record for a user for today
+ * Uses upsert to handle race conditions safely
  */
 async function getOrCreateViewLimit(userId: string) {
   const today = getStartOfToday();
   
-  // Try to find existing record
-  let viewLimit = await prisma.contactViewLimit.findUnique({
+  // Use upsert to handle race conditions - multiple requests
+  // trying to create the same record simultaneously
+  const viewLimit = await prisma.contactViewLimit.upsert({
     where: {
       userId_date: {
         userId,
         date: today,
       },
     },
+    update: {},  // No update needed, just return existing
+    create: {
+      userId,
+      date: today,
+      count: 0,
+    },
   });
-  
-  // Create if not exists
-  if (!viewLimit) {
-    viewLimit = await prisma.contactViewLimit.create({
-      data: {
-        userId,
-        date: today,
-        count: 0,
-      },
-    });
-  }
   
   return viewLimit;
 }
