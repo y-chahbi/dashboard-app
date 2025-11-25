@@ -52,10 +52,10 @@ mkdir -p data
 mkdir -p prisma
 mkdir -p scripts
 mkdir -p src/app/agencies
-mkdir -p src/app/contacts/\[id\]
+mkdir -p 'src/app/contacts/[id]'
 mkdir -p src/app/upgrade
 mkdir -p src/app/api/agencies
-mkdir -p src/app/api/contacts/\[id\]
+mkdir -p 'src/app/api/contacts/[id]'
 mkdir -p src/app/api/view-stats
 mkdir -p src/components
 mkdir -p src/lib
@@ -2568,7 +2568,7 @@ async function main() {
       throw new Error('Contacts file not found: ' + contactsPath);
     }
 
-    console.log('�� Starting data import...\n');
+    console.log('Starting data import...\n');
 
     // Import agencies first
     const agencyMap = await importAgencies(agenciesPath);
@@ -2576,7 +2576,7 @@ async function main() {
     // Import contacts with agency mapping
     await importContacts(contactsPath, agencyMap);
 
-    console.log('\n🎉 Data import completed successfully!');
+    console.log('\nData import completed successfully!');
   } catch (error) {
     console.error('💥 Import failed:', error);
     process.exit(1);
