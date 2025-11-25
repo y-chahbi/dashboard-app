@@ -2,6 +2,8 @@
 
 A production-ready full-stack dashboard application for managing agencies and contacts with daily view rate limiting.
 
+> 📋 **See [SPECIFICATION.md](./SPECIFICATION.md)** for the complete engineering specification, system architecture diagrams, and implementation status.
+
 ## Features
 
 - **Authentication**: Clerk-based authentication for all protected routes
